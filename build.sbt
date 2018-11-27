@@ -1,26 +1,26 @@
 name := "sparklens"
 organization := "com.qubole"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.11.0"
 
-crossScalaVersions := Seq("2.10.6", "2.11.8")
+//crossScalaVersions := Seq("2.10.6", "2.11.8")
 
 spName := "qubole/sparklens"
 
-sparkVersion := "2.0.0"
+sparkVersion := "2.3.1"
 
 spAppendScalaVersion := true
 
 
 libraryDependencies += "org.apache.spark" %% "spark-core" % sparkVersion.value % "provided"
 
-libraryDependencies +=  "org.apache.hadoop" % "hadoop-client" % "2.6.5" % "provided"
+libraryDependencies +=  "org.apache.hadoop" % "hadoop-client" % "3.0.0" % "provided"
 
 testOptions in Test += Tests.Argument("-oF")
 
 scalacOptions ++= Seq("-target:jvm-1.7")
 
-javacOptions ++= Seq("-source", "1.7", "-target", "1.7")
+javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 
 publishMavenStyle := true
 
@@ -48,4 +48,3 @@ pomExtra :=
       <url>https://github.com/beriaanirudh</url>
     </developer>
   </developers>
-
