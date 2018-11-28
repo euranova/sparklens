@@ -14,7 +14,7 @@ spAppendScalaVersion := true
 
 libraryDependencies += "org.apache.spark" %% "spark-core" % sparkVersion.value % "provided"
 
-libraryDependencies +=  "org.apache.hadoop" % "hadoop-client" % "3.0.0" % "provided"
+libraryDependencies +=  "org.apache.hadoop" % "hadoop-client" % "2.0.0" % "provided"
 
 testOptions in Test += Tests.Argument("-oF")
 
