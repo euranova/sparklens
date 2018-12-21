@@ -191,7 +191,7 @@ class AggregateMetrics() {
     updateMetric(AggregateMetrics.shuffleReadRemoteBlocks,  tm.shuffleReadMetrics.remoteBlocksFetched)
     updateMetric(AggregateMetrics.executorRuntime,          tm.executorRunTime)
     updateMetric(AggregateMetrics.jvmGCTime,                tm.jvmGCTime)
-    //updateMetric(AggregateMetrics.executorCpuTime,          tm.executorCpuTime) //Nano to Millis
+    updateMetric(AggregateMetrics.executorCpuTime,          tm.executorCpuTime) //Nano to Millis
     updateMetric(AggregateMetrics.resultSize,               tm.resultSize)
     updateMetric(AggregateMetrics.inputBytesRead,           tm.inputMetrics.bytesRead)
     updateMetric(AggregateMetrics.outputBytesWritten,       tm.outputMetrics.bytesWritten)
