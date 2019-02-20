@@ -23,7 +23,7 @@ import com.qubole.sparklens.analyzer._
 import com.qubole.sparklens.common.{AggregateMetrics, AppContext, ApplicationInfo}
 import com.qubole.sparklens.timespan.{ExecutorTimeSpan, HostTimeSpan, JobTimeSpan, StageTimeSpan}
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.fs.{FileSystem, Path}
+import org.apache.hadoop.fs.{FSDataOutputStream, FileSystem, Path}
 import org.apache.spark.SparkConf
 import org.apache.spark.scheduler._
 
@@ -95,7 +95,7 @@ class QuboleJobListener(sparkConf: SparkConf)  extends SparkListener {
     val taskInfo    = taskEnd.taskInfo
 
     if (taskMetrics == null) return
-    
+
     //update app metrics
     appMetrics.update(taskMetrics, taskInfo)
     val executorTimeSpan = executorMap.get(taskInfo.executorId)
@@ -130,13 +130,27 @@ class QuboleJobListener(sparkConf: SparkConf)  extends SparkListener {
   }
 
   private[this] def dumpData(appContext: AppContext): Unit = {
-    val dumpDir = getDumpDirectory(sparkConf)
-    println(s"Saving sparkLens data to ${dumpDir}")
-    val fs = FileSystem.get(new URI(dumpDir), new Configuration())
-    val stream = fs.create(new Path(s"${dumpDir}/${appInfo.applicationID}.sparklens.json"))
+    val stream = this.getDumpStream()
     val jsonString = appContext.toString
     stream.writeBytes(jsonString)
     stream.close()
+  }
+
+  private[this] def getDumpStream(): FSDataOutputStream = {
+    val dumpFile = getDumpFile(sparkConf)
+    if (dumpFile != "") {
+      println(s"Saving sparkLens data to ${dumpFile}")
+      val dumpPath = new Path(dumpFile)
+      val fs = dumpPath.getFileSystem(new Configuration())
+      fs.create(dumpPath)
+    }
+    else {
+      val dumpDir = getDumpDirectory(sparkConf)
+      val dumpFile = s"${dumpDir}/${appInfo.applicationID}.sparklens.json"
+      println(s"Saving sparkLens data to ${dumpFile}")
+      val fs = FileSystem.get(new URI(dumpDir), new Configuration())
+      fs.create(new Path(dumpFile))
+    }
   }
 
   override def onApplicationStart(applicationStart: SparkListenerApplicationStart): Unit = {

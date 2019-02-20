@@ -4,6 +4,10 @@ import org.apache.spark.SparkConf
 
 package object sparklens {
 
+  private [qubole] def getDumpFile(conf: SparkConf): String = {
+    conf.get("spark.sparklens.data.file", "")
+  }
+
   private [qubole] def getDumpDirectory(conf: SparkConf): String = {
     conf.get("spark.sparklens.data.dir", "/tmp/sparklens/")
   }
